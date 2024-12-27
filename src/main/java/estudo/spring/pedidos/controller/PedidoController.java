@@ -31,27 +31,26 @@ public class PedidoController {
         Integer id = 0;
 
         for (int i = 0; i < (pedidos.size() - 1); i++) {
+            PedidoModel p = pedidos.get(i);
             ProdutoDTO produtoDTO = new ProdutoDTO();
 
-            if (pedidos.get(i).getPedidoId() == id) {
+            if (p.getPedidoId() == id) {
                 PedidoDTO dto = listPedidos.get(listPedidos.size()-1);
-                dto.addListProdutos(produtoDTO.produtoModeltoDto(pedidos.get(i).getProduto(), pedidos.get(i).getQuantidade()));
+                dto.addListProdutos(produtoDTO.produtoModeltoDto(p.getProduto(), p.getQuantidade()));
                 listPedidos.set((listPedidos.size()-1), dto);
 
             } else {
-                pedidoDTO.setPedidoId(pedidos.get(i).getPedidoId());
-                pedidoDTO.setCliente(pedidos.get(i).getCliente());
-                pedidoDTO.setDataPedido(pedidos.get(i).getDataPedido());
+                pedidoDTO.setPedidoId(p.getPedidoId());
+                pedidoDTO.setCliente(p.getCliente());
+                pedidoDTO.setDataPedido(p.getDataPedido());
 
-                pedidoDTO.addListProdutos(produtoDTO.produtoModeltoDto(pedidos.get(i).getProduto(), pedidos.get(i).getQuantidade()));
+                pedidoDTO.addListProdutos(produtoDTO.produtoModeltoDto(p.getProduto(), p.getQuantidade()));
                 listPedidos.add(pedidoDTO);
 
                 pedidoDTO = new PedidoDTO();
             }
-            id = pedidos.get(i).getPedidoId();
-
+            id = p.getPedidoId();
         }
-       
         return listPedidos;
     }
 

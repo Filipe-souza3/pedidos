@@ -2,6 +2,8 @@ package estudo.spring.pedidos.modal;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
@@ -10,21 +12,22 @@ import jakarta.persistence.Table;
 public class ProdutoModel {
 
     @Id
-    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = true)
     private Integer id;
     @Column(name = "nome")
     private String nome;
     @Column(name = "descricao")
     private String descricao;
     @Column(name = "preco")
-    private Float preco;
+    private Double preco;
     @Column(name = "estoque")
     private Integer estoque;
 
     public ProdutoModel() {
     }
 
-    public ProdutoModel(Integer id, String nome, String descricao, Float preco, Integer estoque) {
+    public ProdutoModel(Integer id, String nome, String descricao, Double preco, Integer estoque) {
         this.id = id;
         this.nome = nome;
         this.descricao = descricao;
@@ -56,11 +59,11 @@ public class ProdutoModel {
         this.descricao = descricao;
     }
 
-    public Float getPreco() {
+    public Double getPreco() {
         return preco;
     }
 
-    public void setPreco(Float preco) {
+    public void setPreco(Double preco) {
         this.preco = preco;
     }
 
