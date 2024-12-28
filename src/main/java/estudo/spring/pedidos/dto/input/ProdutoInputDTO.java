@@ -24,19 +24,6 @@ public class ProdutoInputDTO {
     public ProdutoInputDTO() {
     }
 
-    // public ProdutoInputDTO(
-    // @NotBlank(message = "Campo nome é obrigatório.") @Length(min = 5, max = 100,
-    // message = "Minimo é {min} e o máximo é {max}.") String nome,
-    // @NotBlank(message = "Campo descrição é obrigatório.") String descricao,
-    // @NotBlank(message = "Campo preço é obrigatório.") @Length(max = 1000, message
-    // = "Valor máximo é 1000 reais.") Float preco,
-    // Float estoque) {
-    // this.nome = nome;
-    // this.descricao = descricao;
-    // this.preco = preco;
-    // this.estoque = estoque;
-    // }
-
     public ProdutoInputDTO(String nome, String descricao, Double preco, Integer estoque) {
         this.nome = nome;
         this.descricao = descricao;

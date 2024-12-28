@@ -28,7 +28,7 @@ public class ClienteModel {
     private String endereco;
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "clientes")
+    @OneToMany(mappedBy = "cliente")
     private List<TelefoneModel> telefones;
 
     public ClienteModel() {

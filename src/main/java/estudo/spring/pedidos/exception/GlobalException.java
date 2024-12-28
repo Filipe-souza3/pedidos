@@ -26,4 +26,15 @@ public class GlobalException {
         return erro;
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(ListSizeException.class)
+    public ResponseErro listSizeException(ListSizeException e){
+        ResponseErro erro = new ResponseErro();
+        erro.setStatus("400");
+        erro.setMessage(e.getMessage());
+        erro.setError("");
+        erro.setFields(List.of());
+        return erro;
+    }
+
 }
