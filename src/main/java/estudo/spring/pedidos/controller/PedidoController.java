@@ -2,13 +2,17 @@ package estudo.spring.pedidos.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import estudo.spring.pedidos.dto.PedidoDTO;
 import estudo.spring.pedidos.dto.ProdutoDTO;
+import estudo.spring.pedidos.dto.input.PedidoInputDTO;
 import estudo.spring.pedidos.modal.PedidoModel;
 import estudo.spring.pedidos.service.PedidoService;
 
@@ -53,5 +57,13 @@ public class PedidoController {
         }
         return listPedidos;
     }
+
+    @PostMapping
+    public List<PedidoModel> register(@RequestBody List<PedidoInputDTO> dto){
+        List<PedidoModel> listModel = dto.stream().map(d -> d.pedidoDTOToModel()).collect(Collectors.toList());
+        return this.pedidoService.register(listModel);
+    }
+
+    //ver o retorno no pedido depois
 
 }

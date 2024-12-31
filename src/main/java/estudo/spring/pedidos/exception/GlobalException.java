@@ -30,10 +30,12 @@ public class GlobalException {
     @ExceptionHandler(ListSizeException.class)
     public ResponseErro listSizeException(ListSizeException e){
         ResponseErro erro = new ResponseErro();
-        erro.setStatus("400");
+        erro.setStatus(HttpStatus.BAD_REQUEST.toString());
         erro.setMessage(e.getMessage());
-        erro.setError("");
-        erro.setFields(List.of());
+        erro.setError(e.getErro());
+        if(e.getFields().size() >0){
+            erro.setFields(e.getFields());
+        }
         return erro;
     }
 

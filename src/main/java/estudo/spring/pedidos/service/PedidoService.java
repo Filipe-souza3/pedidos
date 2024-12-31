@@ -20,6 +20,15 @@ public class PedidoService {
         return this.pedidoRepository.findAllByOrderByPedidoId();
     }
 
+    public List<PedidoModel> register(List<PedidoModel> listModel){
+        listModel.forEach((m)->{
+            Integer id = this.pedidoRepository.register(m.getProduto().getId(), m.getCliente().getId(), m.getQuantidade());
+            m.setId(id);
+        });
+
+        return listModel;
+    }
+
     
 
 }

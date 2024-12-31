@@ -10,19 +10,14 @@ import org.springframework.stereotype.Component;
 import estudo.spring.pedidos.exception.ListSizeException;
 import estudo.spring.pedidos.modal.ClienteModel;
 import estudo.spring.pedidos.modal.TelefoneModel;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 
 @Component
 public class ClienteInputDTO {
 
     @NotBlank(message = "Campo nome é obrigatório.")
-    @Length(min = 5, max = 100, message = "Minimo é {min} e o máximo é {max}.")
+    @Length(min = 2, max = 100, message = "Minimo é {min} e o máximo é {max}.")
     private String nome;
     @NotBlank(message = "Campo email é obrigatório.")
     @Email(message = "Esse email é inválido.")
@@ -47,12 +42,13 @@ public class ClienteInputDTO {
         model.setNome(this.nome);
         model.setEmail(this.email);
         model.setEndereco(this.endereco);
-        if (this.listaTelefone.size() < 0) {
+        if (this.listaTelefone.size() > 0) {
             List<TelefoneModel> list = this.listaTelefone.stream().map(t -> t.telefoneDTOToModel())
-                .collect(Collectors.toList());
+                    .collect(Collectors.toList());
             model.setTelefones(list);
         } else {
-            throw new ListSizeException("Campo telefone é obrigatório", "");
+            throw new ListSizeException("Campo telefone é obrigatório",
+                    "Lista campo listaTelefone com telefone e obrigatório.", List.of("listaTelefone", "telefone"));
         }
 
         return model;

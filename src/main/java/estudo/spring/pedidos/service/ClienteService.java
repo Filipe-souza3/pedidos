@@ -27,7 +27,7 @@ public class ClienteService {
     }
 
     @Transactional
-    public void register(ClienteModel model){
+    public ClienteModel register(ClienteModel model){
         ClienteModel cliente = this.clienteRepository.save(model);
         model.getTelefones().stream().forEach(t-> {
             TelefoneModel tel = new TelefoneModel();
@@ -36,5 +36,6 @@ public class ClienteService {
             this.telefoneRepository.save(tel);
 
         });
+        return model;
     }
 }

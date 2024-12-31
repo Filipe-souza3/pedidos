@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public class ProdutoInputDTO {
-
+    
     @NotBlank(message = "Campo nome é obrigatório.")
     @Length(min = 4, max = 100, message = "Minimo é {min} e o máximo é {max}.")
     private String nome;
