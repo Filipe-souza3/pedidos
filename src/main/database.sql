@@ -1,3 +1,6 @@
+--DROP SCHEMA public CASCADE;
+--CREATE SCHEMA public;
+
 create table produtos(
 	id serial primary key,
 	nome varchar(100) not null,
@@ -14,7 +17,7 @@ create table clientes(
 );
 
 create table telefones(
-	id serial primary key,
+	--id serial primary key,
 	id_cliente int not null,
 	telefone varchar(20) not null,
 	foreign key(id_cliente) references clientes(id)
@@ -25,6 +28,7 @@ create table pedidos(
 	produto_id int not null,
 	cliente_id int not null,
 	quantidade int not null,
+	pedido_id int not null,
 	data_pedido date default current_date,
 	foreign key (produto_id) references produtos(id),
 	foreign key (cliente_id) references clientes(id)
@@ -106,27 +110,27 @@ INSERT INTO produtos (nome, descricao, preco, estoque) VALUES
 ('Aspirador de Pó Vertical', 'Aspirador de pó sem fio, com filtro HEPA e 2 níveis de potência.', 299.90, 60);
 
 
-INSERT INTO pedidos (produto_id, cliente_id, quantidade, data_pedido) VALUES
-(5, 3, 2, '2024-12-12 08:15:23'),
-(10, 7, 3, '2024-12-13 09:45:10'),
-(12, 9, 1, '2024-12-12 14:30:56'),
-(2, 6, 4, '2024-12-14 16:12:05'),
-(15, 1, 2, '2024-12-13 13:30:45'),
-(6, 14, 1, '2024-12-14 10:23:17'),
-(18, 4, 5, '2024-12-12 18:05:32'),
-(8, 11, 3, '2024-12-13 20:12:56'),
-(13, 17, 2, '2024-12-14 07:45:28'),
-(1, 2, 4, '2024-12-12 16:50:21'),
-(20, 5, 1, '2024-12-13 11:22:10'),
-(9, 12, 3, '2024-12-12 19:30:34'),
-(14, 18, 1, '2024-12-14 09:12:45'),
-(3, 16, 2, '2024-12-13 15:43:22'),
-(17, 8, 1, '2024-12-12 21:30:08'),
-(7, 13, 4, '2024-12-13 22:01:44'),
-(11, 10, 2, '2024-12-14 12:00:30'),
-(4, 15, 3, '2024-12-12 17:40:19'),
-(16, 2, 1, '2024-12-13 08:30:02'),
-(19, 14, 2, '2024-12-12 10:10:56');
+INSERT INTO pedidos (produto_id, cliente_id, quantidade, data_pedido, pedido_id) VALUES
+(5, 3, 2, '2024-12-12 08:15:23',1),
+(10, 7, 3, '2024-12-13 09:45:10',2),
+(12, 9, 1, '2024-12-12 14:30:56',3),
+(2, 6, 4, '2024-12-14 16:12:05',4),
+(15, 1, 2, '2024-12-13 13:30:45',5),
+(6, 14, 1, '2024-12-14 10:23:17',6),
+(18, 4, 5, '2024-12-12 18:05:32',7),
+(8, 11, 3, '2024-12-13 20:12:56',8),
+(13, 17, 2, '2024-12-14 07:45:28',9),
+(1, 2, 4, '2024-12-12 16:50:21'10),
+(20, 5, 1, '2024-12-13 11:22:10',11),
+(9, 12, 3, '2024-12-12 19:30:34',12),
+(14, 18, 1, '2024-12-14 09:12:45',13),
+(3, 16, 2, '2024-12-13 15:43:22',14),
+(17, 8, 1, '2024-12-12 21:30:08',15),
+(7, 13, 4, '2024-12-13 22:01:44',16),
+(11, 10, 2, '2024-12-14 12:00:30',17),
+(4, 15, 3, '2024-12-12 17:40:19',18),
+(16, 2, 1, '2024-12-13 08:30:02',19),
+(19, 14, 2, '2024-12-12 10:10:56',20);
 
 
 

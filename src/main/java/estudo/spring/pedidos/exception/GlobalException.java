@@ -39,4 +39,15 @@ public class GlobalException {
         return erro;
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(GenericException.class)
+    public ResponseErro genericException(GenericException e){
+        ResponseErro erro = new ResponseErro();
+        erro.setStatus(HttpStatus.BAD_REQUEST.toString());
+        erro.setMessage(e.getMessage());
+        erro.setError(e.getErro());
+        erro.setFields(List.of());
+        return erro;
+    }
+
 }

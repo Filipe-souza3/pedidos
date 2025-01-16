@@ -1,6 +1,7 @@
 package estudo.spring.pedidos.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -16,19 +17,38 @@ public class PedidoService {
         this.pedidoRepository = pedidoRepository;
     }
 
-    public List<PedidoModel> list(){
+    public Optional<PedidoModel> findById(Integer id){
+        return this.pedidoRepository.findById(id);
+    }
+
+    public List<PedidoModel> list() {
         return this.pedidoRepository.findAllByOrderByPedidoId();
     }
 
-    public List<PedidoModel> register(List<PedidoModel> listModel){
-        listModel.forEach((m)->{
-            Integer id = this.pedidoRepository.register(m.getProduto().getId(), m.getCliente().getId(), m.getQuantidade());
-            m.setId(id);
-        });
+    public List<PedidoModel> register(List<PedidoModel> listModel) {
+        Integer sequence = this.pedidoRepository.getSequence();
+        listModel.forEach((m) -> {
 
+            /** RETORNANDO OBJECT E PEGANDO AS VALORES */
+            // Object result = this.pedidoRepository.register(m.getProduto().getId(),
+            // m.getCliente().getId(),
+            // m.getQuantidade(), sequence);
+
+            // Object[] objs = (Object[]) result;
+            // m.setPedidoId((Integer) objs[5]);
+            // m.setId((Integer) objs[0]);
+
+            Integer result = this.pedidoRepository.register(m.getProduto().getId(), m.getCliente().getId(),
+                    m.getQuantidade(), sequence);
+
+            m.setPedidoId(sequence);
+            m.setId(result);
+        });
         return listModel;
     }
 
-    
+    public PedidoModel update(PedidoModel model){
+        return this.pedidoRepository.save(model);
+    }
 
 }

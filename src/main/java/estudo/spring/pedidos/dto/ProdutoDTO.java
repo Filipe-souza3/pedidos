@@ -1,11 +1,17 @@
 package estudo.spring.pedidos.dto;
 
-import estudo.spring.pedidos.modal.ProdutoModel;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+import estudo.spring.pedidos.modal.ProdutoModel;
+import jakarta.validation.constraints.NotNull;
+
+@JsonInclude(Include.NON_NULL)
 public class ProdutoDTO {
 
     private Integer id;
     private String nome;
+    @NotNull
     private String descricao;
     private Double preco;
     private Integer quantidade;

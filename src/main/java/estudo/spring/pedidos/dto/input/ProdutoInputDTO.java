@@ -3,10 +3,13 @@ package estudo.spring.pedidos.dto.input;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import estudo.spring.pedidos.modal.ProdutoModel;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ProdutoInputDTO {
     
     @NotBlank(message = "Campo nome é obrigatório.")

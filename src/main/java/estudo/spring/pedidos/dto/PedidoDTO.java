@@ -4,20 +4,27 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import estudo.spring.pedidos.modal.ClienteModel;
+import org.springframework.lang.Nullable;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
+import estudo.spring.pedidos.modal.PedidoModel;
+
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class PedidoDTO {
+
     private Integer pedidoId;
     private List<ProdutoDTO> produtos;
-    private ClienteModel cliente;
-    // private Integer quantidade;
+    private ClienteDTO cliente;
+    @Nullable
+    private Integer quantidade;
     private LocalDate dataPedido;
 
     public PedidoDTO() {
         this.produtos = new ArrayList<ProdutoDTO>();
     }
 
-    public PedidoDTO(Integer pedidoId, List<ProdutoDTO> produtos, ClienteModel cliente, 
+    public PedidoDTO(Integer pedidoId, List<ProdutoDTO> produtos, ClienteDTO cliente, 
             LocalDate dataPedido) {
         this.pedidoId = pedidoId;
         this.produtos = produtos;
@@ -26,12 +33,14 @@ public class PedidoDTO {
 
     }
 
-    // public PedidoDTO pedidoModelToDTO(PedidoModel pedido) {
-    //     PedidoDTO dto = new PedidoDTO(pedido.getPedidoId(), this.produtos, pedido.getCliente(), pedido.getQuantidade(),
-    //             pedido.getDataPedido());
+    public PedidoDTO pedidoModelToDTO(PedidoModel model) {
+        List<ProdutoDTO> listProdutos = new ArrayList<>();
+        ProdutoDTO produtoDTO = new ProdutoDTO().produtoModeltoDto(model.getProduto(), model.getQuantidade());
+        listProdutos.add(produtoDTO);
+        PedidoDTO dto = new PedidoDTO(model.getPedidoId(), listProdutos, new ClienteDTO().clienteModelToDTO(model.getCliente()), model.getDataPedido());
 
-    //     return dto;
-    // }
+        return dto;
+    }
 
     public void addListProdutos(ProdutoDTO produto) {
         this.produtos.add(produto);
@@ -53,11 +62,11 @@ public class PedidoDTO {
         this.produtos = produtos;
     }
 
-    public ClienteModel getCliente() {
+    public ClienteDTO getCliente() {
         return cliente;
     }
 
-    public void setCliente(ClienteModel cliente) {
+    public void setCliente(ClienteDTO cliente) {
         this.cliente = cliente;
     }
 

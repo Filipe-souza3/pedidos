@@ -2,13 +2,18 @@ package estudo.spring.pedidos.modal;
 
 import java.time.LocalDate;
 
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
+@EntityListeners(AuditingEntityListener.class)
 @Entity
 @Table(name = "pedidos")
 public class PedidoModel {
@@ -33,6 +38,7 @@ public class PedidoModel {
     @Column(name = "quantidade")
     private Integer quantidade;
 
+    @LastModifiedDate
     @Column(name = "data_pedido")
     private LocalDate dataPedido;
 
