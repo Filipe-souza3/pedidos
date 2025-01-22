@@ -1,7 +1,10 @@
 package estudo.spring.pedidos.controller;
 
 import java.util.List;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,7 +43,7 @@ public class ProdutoController {
     @PutMapping("/{id}")
     public ResponseEntity<ProdutoDTO> update(@RequestBody @Valid ProdutoInputDTO dto, @PathVariable Integer id) {
         //fazer depois dto onde posso enviar somente um campo para atualizar, nao precisar enviar todos
-        if (!(produtoService.findById(id)).isPresent()) {
+        if (!(this.produtoService.findById(id)).isPresent()) {
             return ResponseEntity.notFound().build();
         }
 
@@ -48,5 +51,21 @@ public class ProdutoController {
         model.setId(id);
         ProdutoModel modelReturn = this.produtoService.update(model);
         return ResponseEntity.ok(new ProdutoDTO().produtoModeltoDto(modelReturn, null));
+    }
+
+
+    /**
+     * 
+     * para fazer
+     * ao deletar, update e inserir fazer update no estoque produtos
+     */
+    @DeleteMapping("/{id}")
+    public ResponseEntity<HttpStatus> delete(@PathVariable Integer id){
+        if(!(this.produtoService.findById(id)).isPresent()){
+            return ResponseEntity.notFound().build();
+        }
+        this.produtoService.delete(id);
+
+        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 }

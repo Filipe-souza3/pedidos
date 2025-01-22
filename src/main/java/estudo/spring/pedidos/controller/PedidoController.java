@@ -5,8 +5,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.apache.catalina.connector.Response;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +23,6 @@ import estudo.spring.pedidos.dto.ProdutoDTO;
 import estudo.spring.pedidos.dto.input.PedidoInputDTO;
 import estudo.spring.pedidos.modal.PedidoModel;
 import estudo.spring.pedidos.service.PedidoService;
-import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/pedidos")
@@ -104,6 +104,19 @@ public class PedidoController {
         PedidoModel modelReturn  = this.pedidoService.update(model);
         return ResponseEntity.ok(new PedidoDTO().pedidoModelToDTO(modelReturn));
     }
+
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<HttpStatus> delete(@PathVariable Integer id){
+        if(!(this.pedidoService.findById(id)).isPresent()){
+            return ResponseEntity.notFound().build();
+        }
+        this.pedidoService.delete(id);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+    }
+
+
+
 
  
 

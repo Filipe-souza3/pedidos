@@ -51,4 +51,8 @@ public class PedidoService {
         return this.pedidoRepository.save(model);
     }
 
+    public void delete(Integer id){
+        this.pedidoRepository.deleteById(id);
+    }
+
 }

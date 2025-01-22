@@ -17,7 +17,7 @@ public class TelefoneModel {
     @Id
     @Column(name = "telefone")
     private String telefone;
-
+    
     @JsonBackReference // para nao dar recursividade no objeto coloca no outro objeto tbm
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_cliente")
