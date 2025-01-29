@@ -1,7 +1,6 @@
 package estudo.spring.pedidos.controller;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -11,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import estudo.spring.pedidos.dto.ClienteDTO;
@@ -30,8 +30,15 @@ public class ClienteController {
     }
 
     @GetMapping
-    public List<ClienteModel> list(){
-        return this.clienteService.list();
+    public Page<ClienteModel> list(
+        @RequestParam(defaultValue = "0") Integer pagina,
+        @RequestParam(defaultValue = "2") Integer qtdPagina,
+        @RequestParam(required = false) Integer id,
+        @RequestParam(required = false) String nome,
+        @RequestParam(required = false) String email,
+        @RequestParam(required = false) String endereco
+        ){
+        return this.clienteService.list(pagina, qtdPagina, id, nome, email, endereco);
     }
 
     @PostMapping
@@ -43,9 +50,6 @@ public class ClienteController {
     @PutMapping("/{id}")
     public ResponseEntity<ClienteDTO> update(@RequestBody @Valid ClienteInputDTO dto, @PathVariable Integer id){
         //fazer depois dto onde posso enviar somente um campo para atualizar, nao precisar enviar todos
-        if(!(this.clienteService.findById(id)).isPresent()){
-            return ResponseEntity.notFound().build();
-        }
     
         ClienteModel model = dto.clienteDTOToModel();
         model.setId(id);
@@ -55,11 +59,6 @@ public class ClienteController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> delete(@PathVariable Integer id){
-
-        if(!(this.clienteService.findById(id)).isPresent()){
-            return ResponseEntity.notFound().build();
-        }
-
         this.clienteService.delete(id);
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }

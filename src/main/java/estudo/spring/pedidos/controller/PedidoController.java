@@ -2,9 +2,9 @@ package estudo.spring.pedidos.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import estudo.spring.pedidos.dto.ClienteDTO;
@@ -36,14 +37,22 @@ public class PedidoController {
 
     @GetMapping
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public List<PedidoDTO> list() {
-        List<PedidoModel> pedidos = this.pedidoService.list();
+    public List<PedidoDTO> list(
+            @RequestParam(required = false, defaultValue = "0") Integer pagina,
+            @RequestParam(required = false, defaultValue = "2") Integer qtdPagina,
+            @RequestParam(required = false) Integer produtoId,
+            @RequestParam(required = false) Integer clienteId,
+            @RequestParam(required = false) Integer quantidade,
+            @RequestParam(required = false) Integer pedidoId) {
+
+        Page<PedidoModel> pedidosPage = this.pedidoService.list(pagina, qtdPagina, produtoId, clienteId, quantidade, pedidoId);
+        List<PedidoModel> pedidos = pedidosPage.getContent();
         List<PedidoDTO> listPedidos = new ArrayList<PedidoDTO>();
 
         PedidoDTO pedidoDTO = new PedidoDTO();
         Integer id = 0;
 
-        for (int i = 0; i < (pedidos.size() - 1); i++) {
+        for (int i = 0; i < pedidos.size() ; i++) {
             PedidoModel p = pedidos.get(i);
             ProdutoDTO produtoDTO = new ProdutoDTO();
 
@@ -82,42 +91,26 @@ public class PedidoController {
         List<PedidoDTOReturnRegister> re2 = new ArrayList<PedidoDTOReturnRegister>();
         reg.forEach((e) -> {
             re2.add(new PedidoDTOReturnRegister(e.getId(), e.getPedidoId(), new ProdutoDTO().produtoModeltoDto(
-                e.getProduto(), null), new ClienteDTO().clienteModelToDTOWithoutPhone(e.getCliente()),
+                    e.getProduto(), null), new ClienteDTO().clienteModelToDTOWithoutPhone(e.getCliente()),
                     e.getQuantidade(), e.getDataPedido()));
         });
         return ResponseEntity.ok(re2);
     }
 
-
-    //fazer valid do pedido
+    // fazer valid do pedido
     @PutMapping("/{id}")
-    public ResponseEntity<PedidoDTO> update(@RequestBody PedidoInputDTO dto, @PathVariable Integer id){
-
-        Optional<PedidoModel> optional = this.pedidoService.findById(id);
-        if(!optional.isPresent()){
-            return ResponseEntity.notFound().build();
-        }
-
+    public ResponseEntity<PedidoDTO> update(@RequestBody PedidoInputDTO dto, @PathVariable Integer id) {
         PedidoModel model = dto.pedidoDTOToModel();
         model.setId(id);
-        model.setPedidoId(optional.get().getPedidoId());
-        PedidoModel modelReturn  = this.pedidoService.update(model);
+        PedidoModel modelReturn = this.pedidoService.update(model);
         return ResponseEntity.ok(new PedidoDTO().pedidoModelToDTO(modelReturn));
     }
 
-
     @DeleteMapping("/{id}")
-    public ResponseEntity<HttpStatus> delete(@PathVariable Integer id){
-        if(!(this.pedidoService.findById(id)).isPresent()){
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<HttpStatus> delete(@PathVariable Integer id) {
+
         this.pedidoService.delete(id);
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
-
-
-
-
- 
 
 }

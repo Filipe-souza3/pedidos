@@ -1,7 +1,6 @@
 package estudo.spring.pedidos.controller;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -11,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import estudo.spring.pedidos.dto.ProdutoDTO;
@@ -30,8 +30,15 @@ public class ProdutoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ProdutoModel>> list() {
-        return ResponseEntity.ok(this.produtoService.list());
+    public ResponseEntity<Page<ProdutoModel>> list(
+            @RequestParam(defaultValue = "0") Integer pagina,
+            @RequestParam(defaultValue = "2") Integer qtdPagina,
+            @RequestParam(required = false) Integer id,
+            @RequestParam(required = false) String nome,
+            @RequestParam(required = false) String descricao,
+            @RequestParam(required = false) Double preco,
+            @RequestParam(required = false) Integer estoque) {
+        return ResponseEntity.ok(this.produtoService.list(pagina, qtdPagina, id, nome, descricao, preco, estoque));
     }
 
     @PostMapping()
@@ -42,30 +49,25 @@ public class ProdutoController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ProdutoDTO> update(@RequestBody @Valid ProdutoInputDTO dto, @PathVariable Integer id) {
-        //fazer depois dto onde posso enviar somente um campo para atualizar, nao precisar enviar todos
-        if (!(this.produtoService.findById(id)).isPresent()) {
-            return ResponseEntity.notFound().build();
-        }
-
+        // fazer depois dto onde posso enviar somente um campo para atualizar, nao
+        // precisar enviar todos
         ProdutoModel model = dto.produtoDTOToModel();
         model.setId(id);
         ProdutoModel modelReturn = this.produtoService.update(model);
         return ResponseEntity.ok(new ProdutoDTO().produtoModeltoDto(modelReturn, null));
     }
 
-
     /**
      * 
      * para fazer
-     * ao deletar, update e inserir fazer update no estoque produtos
+     * o deletar, update e inserir fazer update no estoque produtos
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<HttpStatus> delete(@PathVariable Integer id){
-        if(!(this.produtoService.findById(id)).isPresent()){
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<HttpStatus> delete(@PathVariable Integer id) {
+        // if(!(this.produtoService.findById(id)).isPresent()){
+        // return ResponseEntity.notFound().build();
+        // }
         this.produtoService.delete(id);
-
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 }
